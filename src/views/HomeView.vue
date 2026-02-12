@@ -5,7 +5,7 @@ import { ref } from 'vue';
 const questionAmount = ref(10)
 
 function goToQuiz () {
-  router.push(`/quiz/${questionAmount.value}`)
+  router.push(`/Trivia-Quiz/quiz/${questionAmount.value}`)
 }
 </script>
 
