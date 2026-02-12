@@ -67,7 +67,7 @@ export default {
           category: atob(q.category),
           type: atob(q.type),
           difficulty: atob(q.difficulty),
-          question: atob(btoa("éééèèè''??'")), // atob(q.question),
+          question: atob(q.question),
           correct_answer: atob(q.correct_answer),
           incorrect_answers: q.incorrect_answers.map(ans => atob(ans)),
           answers: allAnswers.sort(() => atob(q.type) === "multiple" ? Math.random() - 0.5 : -1) 
