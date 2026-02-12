@@ -54,17 +54,22 @@ export default {
   },
 
   async created() {
-    const url = "https://opentdb.com/api.php?amount=10";
+    const url = "https://opentdb.com/api.php?amount=10&difficulty=easy&encode=base64";
     try {
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Error : ${response.status} - ${response.statusText}`);
       }
       const result = await response.json();
-            this.questions = result.results.map(q => {
-        const allAnswers = [...q.incorrect_answers, q.correct_answer];
+      this.questions = result.results.map(q => {
+        const allAnswers = [...q.incorrect_answers.map(ans => atob(ans)), atob(q.correct_answer)];
         return {
-          ...q,
+          category: atob(q.category),
+          type: atob(q.type),
+          difficulty: atob(q.difficulty),
+          question: atob(q.question),
+          correct_answer: atob(q.correct_answer),
+          incorrect_answers: q.incorrect_answers.map(ans => atob(ans)),
           answers: allAnswers.sort(() => Math.random() - 0.5) 
         };
       });
