@@ -70,10 +70,10 @@ export default {
           question: atob(q.question),
           correct_answer: atob(q.correct_answer),
           incorrect_answers: q.incorrect_answers.map(ans => atob(ans)),
-          answers: allAnswers.sort(() => Math.random() - 0.5) 
+          answers: allAnswers.sort(() => atob(q.type) === "multiple" ? Math.random() - 0.5 : 0) 
         };
       });
-      
+      console.log(this.questions);
     } catch (error) {
       console.error(error);
     } finally {
