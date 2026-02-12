@@ -1,10 +1,15 @@
-<script setup></script>
+<script setup>
+import router from '@/router';
+function goToQuiz () {
+  router.push("/quiz")
+}
+</script>
 
 <template>
   <main class="home-container">
     <div class="content">
       <img src="@/assets/logo.png" alt="Trivia Quiz Logo" class="logo" />
-      <button class="start-btn">Start Playing</button>
+      <button class="start-btn" @click="goToQuiz">Start Playing</button>
     </div>
   </main>
 </template>
