@@ -1,29 +1,36 @@
 <template>
-  <div class="question-page">
-    <h1 class="title">Quiz Test</h1>
+  <div class="container">
+    <div class="question-page">
+      <h1 class="title">Quiz Test</h1>
 
-    <div class="question-container">
-      <h2 class="question-text">{{ this.currentQuestion.question }}</h2>
+      <div v-if="loading" class="loading">
+        Chargement des questions...
+      </div>
 
-      <AnswerCard
-        v-for="answer in this.currentQuestion.answers"
-        :key="answer.value"
-        :text="answer.text"
-        :value="answer.value"
-        :selectedValue="this.selectedValue"
-        :correctValue="this.currentQuestion.correctAnswer"
-        :isValidated="this.isValidated"
-        @select="this.handleSelect"
-      />
+      <div v-else-if="currentQuestion" class="question-container">
+        <h2 class="question-text">{{ currentQuestion.question }}</h2>
+
+        <AnswerCard
+          v-for="(answer, index) in currentQuestion.answers"
+          :key="index"
+          :text="answer"
+          :value="answer"
+          :selectedValue="selectedValue"
+          :correctValue="currentQuestion.correct_answer"
+          :isValidated="isValidated"
+          @select="handleSelect"
+        />
+      </div>
+
+      <button
+        v-if="!loading"
+        class="action-button"
+        @click="handleAction"
+        :disabled="selectedValue === null && !isValidated"
+      >
+        {{ isValidated ? 'Question suivante' : 'Valider' }}
+      </button>
     </div>
-
-    <button
-      class="action-button"
-      @click="this.handleAction"
-      :disabled="this.selectedValue === null && !this.isValidated"
-    >
-      {{ this.isValidated ? 'Question suivante' : 'Valider' }}
-    </button>
   </div>
 </template>
 
@@ -36,62 +43,64 @@ export default {
   components: {
     AnswerCard
   },
-
   data() {
     return {
+      questions: [],
       currentIndex: 0,
       selectedValue: null,
       isValidated: false,
-      questions: [
-        {
-          question: "Quelle est la capitale de la France ?",
-          correctAnswer: "b",
-          answers: [
-            { value: "a", text: "Madrid" },
-            { value: "b", text: "Paris" },
-            { value: "c", text: "Rome" },
-            { value: "d", text: "Berlin" }
-          ]
-        },
-        {
-          question: "Combien font 2 + 2 ?",
-          correctAnswer: 2,
-          answers: [
-            { value: 1, text: "3" },
-            { value: 2, text: "4" },
-            { value: 3, text: "5" },
-            { value: 4, text: "22" }
-          ]
-        }
-      ]
+      loading: true
     };
+  },
+
+  async created() {
+    const url = "https://opentdb.com/api.php?amount=10";
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Error : ${response.status} - ${response.statusText}`);
+      }
+      const result = await response.json();
+            this.questions = result.results.map(q => {
+        const allAnswers = [...q.incorrect_answers, q.correct_answer];
+        return {
+          ...q,
+          answers: allAnswers.sort(() => Math.random() - 0.5) 
+        };
+      });
+      
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.loading = false;
+    }
   },
 
   computed: {
     currentQuestion() {
+      if (!this.questions || this.questions.length === 0) return null;
       return this.questions[this.currentIndex];
     }
   },
 
   methods: {
-    // Handle selection from child component
     handleSelect(value) {
+      if (this.isValidated) return;
       this.selectedValue = value;
     },
 
-    // Handle validate / next question logic with one button
     handleAction() {
-      // If not validated yet → validate
       if (!this.isValidated) {
         this.isValidated = true;
         return;
       }
 
-      // If already validated → go to next question
       if (this.currentIndex < this.questions.length - 1) {
         this.currentIndex++;
         this.selectedValue = null;
         this.isValidated = false;
+      } else {
+        alert("Quiz terminé !");
       }
     }
   }
@@ -99,6 +108,17 @@ export default {
 </script>
 
 <style scoped>
+
+.loading {
+  text-align: center;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.container {
+  background-color: #111827;
+}
+
 .question-page {
   max-width: 600px;
   margin: 40px auto;
