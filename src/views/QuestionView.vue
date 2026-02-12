@@ -106,7 +106,9 @@ export default {
               .replace(/Ã¨/g, "è")
               .replace(/â\\x80\\x99/g, "'"),
           ),
-          answers: allAnswers.sort(() => (atob(q.type) === "multiple" ? Math.random() - 0.5 : -1)),
+          answers: allAnswers.sort((a, b) =>
+            atob(q.type) === "multiple" ? Math.random() - 0.5 : a.length - b.length,
+          ),
         };
       });
     } catch (error) {
