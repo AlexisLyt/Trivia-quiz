@@ -81,12 +81,12 @@ export default {
             atob(ans)
               .replace(/Ã©/g, "é")
               .replace(/Ã¨/g, "è")
-              .replace(/â\\x80\\x99/g, "'"),
+              .replace(/â\\x80\\x9C/g, "'"),
           ),
           atob(q.correct_answer)
             .replace(/Ã©/g, "é")
             .replace(/Ã¨/g, "è")
-            .replace(/â\\x80\\x99/g, "'"),
+            .replace(/â\\x80\\x9C/g, "'"),
         ];
         return {
           category: atob(q.category),
@@ -95,16 +95,16 @@ export default {
           question: atob(q.question)
             .replace(/Ã©/g, "é")
             .replace(/Ã¨/g, "è")
-            .replace(/â\\x80\\x99/g, "'"),
+            .replace(/â\x80\x9C/g, "'"),
           correct_answer: atob(q.correct_answer)
             .replace(/Ã©/g, "é")
             .replace(/Ã¨/g, "è")
-            .replace(/â\\x80\\x99/g, "'"),
+            .replace(/â\x80\x9C/g, "'"),
           incorrect_answers: q.incorrect_answers.map((ans) =>
             atob(ans)
               .replace(/Ã©/g, "é")
               .replace(/Ã¨/g, "è")
-              .replace(/â\\x80\\x99/g, "'"),
+              .replace(/â\x80\x9C/g, "'"),
           ),
           answers: allAnswers.sort((a, b) =>
             atob(q.type) === "multiple" ? Math.random() - 0.5 : a.length - b.length,
