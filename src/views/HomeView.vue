@@ -1,7 +1,11 @@
 <script setup>
 import router from '@/router';
+import { ref } from 'vue';
+
+const questionAmount = ref(10)
+
 function goToQuiz () {
-  router.push("/quiz")
+  router.push(`/quiz/${questionAmount.value}`)
 }
 </script>
 
@@ -9,6 +13,10 @@ function goToQuiz () {
   <main class="home-container">
     <div class="content">
       <img src="@/assets/logo.png" alt="Trivia Quiz Logo" class="logo" />
+      <div class="question_amount">
+        <p>Questions : {{ questionAmount }}</p>
+        <input type="range" name="amountSelector" id="amount_selector" v-model="questionAmount" min="5" max="30">
+      </div>
       <button class="start-btn" @click="goToQuiz">Start Playing</button>
     </div>
   </main>
@@ -57,5 +65,11 @@ function goToQuiz () {
 .start-btn:active {
   transform: translateY(0);
   box-shadow: 0 2px 10px rgba(102, 126, 234, 0.4);
+}
+p {
+  font-size: 1.1rem;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 600;
+  color: #ffffff;
 }
 </style>

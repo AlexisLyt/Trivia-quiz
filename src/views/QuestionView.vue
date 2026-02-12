@@ -72,7 +72,7 @@ export default {
   },
 
   async created() {
-    const url = "https://opentdb.com/api.php?amount=10&difficulty=easy&encode=base64";
+    const url = `https://opentdb.com/api.php?amount=${this.$route.params.amount}&difficulty=easy&encode=base64`;
     try {
       const response = await fetch(url);
       if (!response.ok) {
