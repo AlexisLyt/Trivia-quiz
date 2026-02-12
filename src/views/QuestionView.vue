@@ -88,7 +88,7 @@ export default {
           question: atob(q.question).replace(/Ã©/g, 'é').replace(/Ã¨/g, 'è'),
           correct_answer: atob(q.correct_answer),
           incorrect_answers: q.incorrect_answers.map(ans => atob(ans)),
-          answers: allAnswers.sort(() => atob(q.type) === "multiple" ? Math.random() - 0.5 : -1)
+          answers: allAnswers.sort((a, b) => atob(q.type) === "multiple" ? Math.random() - 0.5 : a.length - b.length),
         };
       });
     } catch (error) {
