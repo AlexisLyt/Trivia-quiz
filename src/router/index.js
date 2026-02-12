@@ -1,7 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import QuestionView from '@/views/QuestionView.vue'
+import HomeView from '@/views/HomeView.vue'
 
 const routes = [
+  {
+    path: '/',
+    name: 'Home',
+    component: HomeView
+  },
   {
     path: '/quiz',
     name: 'Quiz',
