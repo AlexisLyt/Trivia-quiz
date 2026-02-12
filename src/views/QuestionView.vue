@@ -54,7 +54,7 @@ export default {
   },
 
   async created() {
-    const url = "https://opentdb.com/api.php?amount=10&difficulty=easy&encode=base64";
+    const url = `https://opentdb.com/api.php?amount=${this.$route.params.amount}&difficulty=easy&encode=base64`;
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -70,7 +70,7 @@ export default {
           question: atob(q.question),
           correct_answer: atob(q.correct_answer),
           incorrect_answers: q.incorrect_answers.map(ans => atob(ans)),
-          answers: allAnswers.sort(() => atob(q.type) === "multiple" ? Math.random() - 0.5 : 0) 
+          answers: allAnswers.sort(() => atob(q.type) === "multiple" ? Math.random() - 0.5 : 0)
         };
       });
       console.log(this.questions);

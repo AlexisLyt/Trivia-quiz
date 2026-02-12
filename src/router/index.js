@@ -9,7 +9,7 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/quiz',
+    path: '/quiz/:amount',
     name: 'Quiz',
     component: QuestionView
   }
