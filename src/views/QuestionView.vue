@@ -3,9 +3,7 @@
     <div class="question-page">
       <h1 class="title">Quiz Test</h1>
 
-      <div v-if="loading" class="loading">
-        Loading questions...
-      </div>
+      <div v-if="loading" class="loading">Loading questions...</div>
 
       <!-- Question display -->
       <div v-else-if="currentQuestion && !finished" class="question-container">
@@ -30,9 +28,7 @@
           Score final : <strong>{{ score }}</strong> / {{ questions.length }}
         </p>
 
-        <button class="replay-button" @click="goHome">
-          Rejouer
-        </button>
+        <button class="replay-button" @click="goHome">Rejouer</button>
       </div>
 
       <!-- Action button -->
@@ -42,7 +38,7 @@
         @click="handleAction"
         :disabled="selectedValue === null && !isValidated"
       >
-        {{ isValidated ? (isLastQuestion ? 'Finish quiz' : 'Next question') : 'Validate' }}
+        {{ isValidated ? (isLastQuestion ? "Finish quiz" : "Next question") : "Validate" }}
       </button>
     </div>
   </div>
@@ -55,7 +51,7 @@ export default {
   name: "QuestionView",
 
   components: {
-    AnswerCard
+    AnswerCard,
   },
 
   data() {
@@ -79,16 +75,38 @@ export default {
         throw new Error(`Error : ${response.status} - ${response.statusText}`);
       }
       const result = await response.json();
-      this.questions = result.results.map(q => {
-        const allAnswers = [...q.incorrect_answers.map(ans => atob(ans)), atob(q.correct_answer)];
+      this.questions = result.results.map((q) => {
+        const allAnswers = [
+          ...q.incorrect_answers.map((ans) =>
+            atob(ans)
+              .replace(/Ã©/g, "é")
+              .replace(/Ã¨/g, "è")
+              .replace(/â\\x80\\x99/g, "'"),
+          ),
+          atob(q.correct_answer)
+            .replace(/Ã©/g, "é")
+            .replace(/Ã¨/g, "è")
+            .replace(/â\\x80\\x99/g, "'"),
+        ];
         return {
           category: atob(q.category),
           type: atob(q.type),
           difficulty: atob(q.difficulty),
-          question: atob(q.question).replace(/Ã©/g, 'é').replace(/Ã¨/g, 'è'),
-          correct_answer: atob(q.correct_answer),
-          incorrect_answers: q.incorrect_answers.map(ans => atob(ans)),
-          answers: allAnswers.sort(() => atob(q.type) === "multiple" ? Math.random() - 0.5 : -1)
+          question: atob(q.question)
+            .replace(/Ã©/g, "é")
+            .replace(/Ã¨/g, "è")
+            .replace(/â\\x80\\x99/g, "'"),
+          correct_answer: atob(q.correct_answer)
+            .replace(/Ã©/g, "é")
+            .replace(/Ã¨/g, "è")
+            .replace(/â\\x80\\x99/g, "'"),
+          incorrect_answers: q.incorrect_answers.map((ans) =>
+            atob(ans)
+              .replace(/Ã©/g, "é")
+              .replace(/Ã¨/g, "è")
+              .replace(/â\\x80\\x99/g, "'"),
+          ),
+          answers: allAnswers.sort(() => (atob(q.type) === "multiple" ? Math.random() - 0.5 : -1)),
         };
       });
     } catch (error) {
@@ -102,7 +120,7 @@ export default {
     currentQuestion() {
       if (!this.questions || this.questions.length === 0) return null;
       return this.questions[this.currentIndex];
-    }
+    },
   },
 
   methods: {
@@ -135,9 +153,9 @@ export default {
     },
 
     goHome() {
-      this.$router.push('/');
-    }
-  }
+      this.$router.push("/");
+    },
+  },
 };
 </script>
 
