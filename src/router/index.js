@@ -4,12 +4,12 @@ import HomeView from '@/views/HomeView.vue'
 
 const routes = [
   {
-    path: '/',
+    path: '/Trivia-Quiz/',
     name: 'Home',
     component: HomeView
   },
   {
-    path: '/quiz/:amount',
+    path: '/Trivia-Quiz/quiz/:amount',
     name: 'Quiz',
     component: QuestionView
   }
